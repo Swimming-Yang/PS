@@ -1,12 +1,12 @@
 import java.io.*;
-
+import java.util.*;
 
 public class Main {
 	
-	public static boolean[][] map;
-	public static int count = 0;
+	public static int[] map;
 	public static int N;
-	
+	public static int count = 0;
+
 	public static void main(String[] args) throws IOException{
 		init();
 		
@@ -16,48 +16,37 @@ public class Main {
 
 	}
 
+
+
 	private static void init() throws IOException{
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		N = Integer.parseInt(br.readLine());
-		map = new boolean[N][N];
+		map = new int[N];
 		
 	}
-
-	private static void backtracking(int row) {
-		// 완료조건
-		if(row == N) {
+	
+	private static void backtracking(int depth) {
+		if(depth == N) {
 			count++;
 			return;
 		}
 		
-		for(int col = 0; col < N; col++) {
-			if(possible(row, col)) {
-				map[row][col] = true;
-				backtracking(row + 1);
-				map[row][col] = false;
-			}
-		}
-	}
-
-	private static boolean possible(int row, int col) {
-		for(int i = 0; i < row; i++) {
-			if(map[i][col]) return false;
-		}
-		int r = row - 1;
-		int c = col - 1;
-		while(r >= 0 && c >= 0) {
-			if(map[r][c]) return false;
-			r--;
-			c--;
+		for(int i = 0; i < N; i++) {
+			map[depth] = i;
+			
+			if(possible(depth)) backtracking(depth + 1);
 		}
 		
-		r = row - 1;
-		c = col + 1;
-		while(r >= 0 && c < N) {
-			if(map[r][c]) return false;
-			r--;
-			c++;
+	}
+
+
+
+	private static boolean possible(int col) {
+		// TODO Auto-generated method stub
+		for(int i = 0; i < col; i++) {
+			if(map[col] == map[i]) return false;
+			else if(Math.abs(col - i) == Math.abs(map[col] - map[i])) return false;
 		}
 		return true;
 	}
